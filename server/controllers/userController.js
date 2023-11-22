@@ -74,6 +74,27 @@ module.exports.setAvatar = async (req, res, next) => {
   }
 };
 
+module.exports.setVoiceUploaded = async (req, res, next) => {
+  try {
+    const userId = req.params.id;
+    const userData = await User.findByIdAndUpdate(
+      userId,
+      {
+        voiceAdded: true
+      },
+      { new: true }
+    );
+    return res.json({
+      status: "true",
+      userData
+    });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+
+
 module.exports.logOut = (req, res, next) => {
   try {
     if (!req.params.id) return res.json({ msg: "User id is required " });

@@ -55,8 +55,7 @@ export default function Login() {
           process.env.REACT_APP_LOCALHOST_KEY,
           JSON.stringify(data.user)
         );
-
-        navigate("/");
+        navigate("/")
       }
     }
   };
@@ -67,7 +66,7 @@ export default function Login() {
         <form action="" onSubmit={(event) => handleSubmit(event)}>
           <div className="brand">
             <img src={Logo} alt="logo" />
-            <h1>RandomChat</h1>
+            <h1>Vartalaap</h1>
           </div>
           <input
             type="text"
@@ -93,7 +92,7 @@ export default function Login() {
   );
 }
 
-const FormContainer = styled.div`
+export const FormContainer = styled.div`
   height: 100vh;
   width: 100vw;
   display: flex;
@@ -114,6 +113,15 @@ const FormContainer = styled.div`
       color: white;
       text-transform: uppercase;
     }
+  }
+
+  .upload {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background-color: #00000076;
+    border-radius: 2rem;
+    padding: 5rem;
   }
 
   form {

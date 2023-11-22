@@ -5,10 +5,12 @@ import Logout from "./Logout";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { sendMessageRoute, recieveMessageRoute } from "../utils/APIRoutes";
+import { PYTHON_BASE_URL } from "../pages/UploadVoice";
 
 export default function ChatContainer({ currentChat, socket }) {
   const [messages, setMessages] = useState([]);
   const scrollRef = useRef();
+  const [src, setSrc] = useState(null);
   const [arrivalMessage, setArrivalMessage] = useState(null);
 
   useEffect(async () => {
@@ -23,6 +25,7 @@ export default function ChatContainer({ currentChat, socket }) {
   }, [currentChat]);
 
   useEffect(() => {
+    console.log(currentChat);
     const getCurrentChat = async () => {
       if (currentChat) {
         await JSON.parse(
@@ -53,10 +56,16 @@ export default function ChatContainer({ currentChat, socket }) {
     setMessages(msgs);
   };
 
+  const generateVoice = async (msg) => {
+      const response = await axios.post(`${PYTHON_BASE_URL}/generate`, { voice_name: currentChat.username, text: msg }, {responseType: "blob"} );
+      setSrc(URL.createObjectURL(response.data))
+  }
+
   useEffect(() => {
     if (socket.current) {
       socket.current.on("msg-recieve", (msg) => {
         setArrivalMessage({ fromSelf: false, message: msg });
+        generateVoice(msg)
       });
     }
   }, []);
@@ -71,6 +80,7 @@ export default function ChatContainer({ currentChat, socket }) {
 
   return (
     <Container>
+      <audio style={{ display: 'none' }} src={src} autoPlay />
       <div className="chat-header">
         <div className="user-details">
           <div className="avatar">
